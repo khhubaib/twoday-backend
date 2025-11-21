@@ -8,19 +8,33 @@ use Illuminate\Http\Request;
 
 class MetaTagsController extends Controller
 {
+
+    public function index()
+    {
+        $tags = Meta_tag::all(); // Fetch all records from meta_tags
+
+        return response()->json([
+            'message' => 'tags fetched successfully',
+            'tags' => $tags
+        ], 200);
+    }
+
+
+
     public function store(Request $request)
     {
         $validated = $request->validate([
-            'page_id' => 'required|exists:pages,id',
+            'page' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'keywords' => 'required|string|max:255',
-            'canonical_url' => 'required|string|max:255',
+            'keywords' => [
+                'required',
+                'regex:/^(\s*[\w\s]+,)*\s*[\w\s]+$/'
+            ],
+            'canonical_url' => 'required|url',
         ]);
 
-        // fetch page name
-        $page = Pages::findOrFail($validated['page_id']);
-        $validated['page'] = $page->page;
+
 
         $tags = Meta_tag::create($validated);
 
@@ -35,10 +49,11 @@ class MetaTagsController extends Controller
         $tag = Meta_tag::findOrFail($id);
 
         $validated = $request->validate([
+            'page' => 'required|string|max:255',
             'title' => 'required|string|max:255',
             'description' => 'required|string|max:255',
-            'keywords' => 'required|string|max:255',
-            'canonical_url' => 'required|string|max:255',
+            'keywords' => ['required', 'regex:/^(\s*[\w\s]+,)*\s*[\w\s]+$/'],
+            'canonical_url' => 'required|url',
         ]);
 
         $tag->update($validated);
@@ -70,12 +85,12 @@ class MetaTagsController extends Controller
 
 
     public function destroy($id)
-{
-    $tag = Meta_tag::findOrFail($id);
-    $tag->delete();
+    {
+        $tag = Meta_tag::findOrFail($id);
+        $tag->delete();
 
-    return response()->json([
-        'message' => 'Tag deleted successfully',
-    ], 200);
-}
+        return response()->json([
+            'message' => 'Tag deleted successfully',
+        ], 200);
+    }
 }

@@ -19,3 +19,5 @@ Route::get('/pages/{id}/tags', [MetaTagsController::class, 'getTagsByPage']);
 Route::get('/metatags/{id}', [MetaTagsController::class, 'show']);
 Route::delete('/metatags/{id}', [MetaTagsController::class, 'destroy']);
 
+Route::get('/tags', [MetaTagsController::class, 'index']);
+

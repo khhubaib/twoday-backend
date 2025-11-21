@@ -18,7 +18,10 @@ class PagesController extends Controller
     {
         $validated = $request->validate([
             'page' => 'required|string|max:255',
+
         ]);
+
+       
 
         $user = Pages::create($validated);
 

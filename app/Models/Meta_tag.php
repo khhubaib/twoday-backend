@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
     class Meta_tag extends Model
 {
     protected $fillable = [
-        'page_id',
         'page',
         'title',
         'description',
@@ -16,10 +15,7 @@ use Illuminate\Database\Eloquent\Model;
         'canonical_url'
     ];
 
-    public function page()
-    {
-        return $this->belongsTo(Pages::class, 'page_id');
-    }
+    
 }
 
 
